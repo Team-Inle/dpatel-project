@@ -42,7 +42,7 @@ module.exports = function(){
             var authTokenHeaders = {
                 headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + Buffer.from(client_id + ':' + client_secret).toString('base64')
+                'Authorization': 'Basic ' + Buffer.from(req.app.get('authClient').client_id + ':' + req.app.get('authClient').client_secret).toString('base64')
                 },
             };
     
