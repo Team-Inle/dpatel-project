@@ -36,46 +36,17 @@ app.set('view engine', 'handlebars');
 
 app.use('/login', require('./login.js'));
 
-app.get('/profile', function(req, res) {
-	var authTokenHeaders = {
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': 'Bearer ' + req.session.access_token,
-		},
-	};
-	axios.get('https://api.spotify.com/v1/me', authTokenHeaders)
-	.then(response => {
-		console.log(response.data);
-		res.send(response.data);
-		req.session.profile = response.data;
-	})
-	.catch(error => {
-		console.log(error);
-	});
-});
-
-app.get('/playlists', function(req, res) {
-	var authTokenHeaders = {
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': 'Bearer ' + req.session.access_token,
-		},
-  	};
-	axios.get('https://api.spotify.com/v1/me', authTokenHeaders)
-	.then(response => {
-		console.log(response.data);
-		res.send(response.data);
-	})
-	.catch(error => {
-		console.log(error);
-	});
-});
-
 app.get('/', function(req, res){
 	res.redirect('/login');
 });
 
-// ##TODO
+app.get('/profile', function(req, res) {
+	var context = {};
+	context.profile = req.session.profile;
+	context.playlists = req.session.playlists;
+	res.send(context);
+});
+
 app.use(function(req,res){
 	res.status(404);
 	res.render('404');

@@ -17,7 +17,7 @@ module.exports = function(){
     }); 
 
     /**
-     * Spotify OAuth Interface - authorization - ##TODO
+     * Spotify OAuth Interface - authorization
      */
     router.get('/spotifyAuthLogin', function(req, res) {
         var loginParams = new URLSearchParams();
@@ -28,7 +28,7 @@ module.exports = function(){
     });
 
     /**
-     * Spotify OAuth Interface - tokens - ##TODO
+     * Spotify OAuth Interface - tokens
      */
     router.get('/spotifyAuthCallback', function(req, res) {
         // if user has accepted the request then autherization code should have been returned
@@ -49,10 +49,9 @@ module.exports = function(){
             // perform POST request to token API with params and headers
             axios.post('https://accounts.spotify.com/api/token', authTokenParams.toString(), authTokenHeaders)
                 .then(response => {
-                    console.log(response.data);
-                    req.session.access_token = response.data.access_token;
-                    req.session.refresh_token = response.data.access_token;
-                    res.redirect('/profile');
+                    // store token data in session
+                    req.session.token_data = response.data;
+                    res.redirect('/login/fetchProfile');
                 })
                 .catch(error => {
                     console.log(error);
@@ -65,6 +64,59 @@ module.exports = function(){
             // this should never happen, but if it does - do something
             else {
             // ##TODO
+        }
+    });
+
+    /**
+     * Spotify OAuth Interface - fetch user's profile data
+     */
+    router.get('/fetchProfile', function(req, res) {
+         // if app has user's auth token, then fetch their profile data
+        if(req.session.token_data) {
+            var authTokenHeaders = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + req.session.token_data.access_token,
+                },
+            };
+            axios.get('https://api.spotify.com/v1/me', authTokenHeaders)
+            .then(response => {
+                req.session.profile = response.data;
+                res.redirect('/login/fetchPlaylists');
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        }
+        // otherwise re-initiate login & authorization
+        else {
+            res.redirect('/login');
+        }
+    });
+
+    /**
+     * Spotify OAuth Interface - fetch user's playlist data
+     */
+    router.get('/fetchPlaylists', function(req, res) {
+        if(req.session.token_data) {
+            var authTokenHeaders = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + req.session.token_data.access_token,
+                },
+            };
+            axios.get('https://api.spotify.com/v1/me/playlists', authTokenHeaders)
+            .then(response => {
+                req.session.playlists = response.data;
+                res.redirect('/profile');
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        }
+        // otherwise initiate login & authorization
+        else {
+            res.redirect('/login');
         }
     });
 
