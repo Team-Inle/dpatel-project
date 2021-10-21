@@ -1,0 +1,8 @@
+body {
+    background: linear-gradient(25deg, #ff10c7 40%, transparent 41%, transparent 59%, #ff10c7 60%) ,linear-gradient(90deg, transparent 45%, #14d7ee 45%, #14d7ee 55%, transparent 55%, transparent 20%, #14d7ee 20%, #14d7ee 30%,transparent 30%);
+    background-size: 5em 5em;
+    background-color: #ff10c7;
+    opacity: 0.75;
+    padding-bottom: 70px;
+    padding-bottom: 70px;
+}

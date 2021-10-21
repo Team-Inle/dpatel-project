@@ -13,7 +13,8 @@ var app = express(); // create express instance called app
 app.use(express.json()); // set app to recognize incoming objects as JSON
 app.use(express.urlencoded({extended: true})); // ##TODO - this might be default now... not entirely sure if necessary
 app.use(cors()); // ##TODO
-app.use(express.static('public')); // set public folder as the web root
+app.use('/public',express.static(__dirname + '/public')); // set public folder as the web root
+console.log(__dirname + '/public');
 
 app.set('port', 4077); // set app to run on port 4077
 app.set('authClient', {
@@ -37,14 +38,14 @@ app.set('view engine', 'handlebars');
 app.use('/login', require('./login.js'));
 
 app.get('/', function(req, res){
-	res.redirect('/login');
-});
-
-app.get('/profile', function(req, res) {
-	var context = {};
-	context.profile = req.session.profile;
-	context.playlists = req.session.playlists;
-	res.send(context);
+	if(!req.session.profile) {
+		res.redirect('/login');
+	}
+	else {
+		var context = {};
+		context.playlists = req.session.playlists;
+		res.render('home', context.playlists);
+	}
 });
 
 app.use(function(req,res){
