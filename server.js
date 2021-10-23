@@ -38,14 +38,16 @@ app.set('view engine', 'handlebars');
 app.use('/login', require('./login.js'));
 
 app.get('/', function(req, res){
-	if(!req.session.profile) {
-		res.redirect('/login');
+	var context = {};
+	res.render('home', context);
+});
+
+app.get('/home', function(req, res){
+	var context = {};
+	if(req.session.profile) {
+		context.user = req.session.profile.display_name;
 	}
-	else {
-		var context = {};
-		context.playlists = req.session.playlists;
-		res.render('home', context.playlists);
-	}
+	res.render('home', context);
 });
 
 app.use(function(req,res){

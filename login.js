@@ -1,3 +1,5 @@
+const { ENETUNREACH } = require('constants');
+
 module.exports = function(){
     var express = require('express');
     var router = express.Router();
@@ -8,7 +10,7 @@ module.exports = function(){
         var context = {};
         // if user has logged in, then get user data from Users and Workouts and render profile page
         if(req.session.profile) {
-            res.redirect('/profile')
+            res.redirect('/home')
         }
         // if user has not logged in, redirect to home page
         else {
@@ -20,11 +22,11 @@ module.exports = function(){
      * Spotify OAuth Interface - authorization
      */
     router.get('/spotifyAuthLogin', function(req, res) {
-        var loginParams = new URLSearchParams();
-        loginParams.set('response_type', 'code');
-        loginParams.set('client_id', req.app.get('authClient').client_id);
-        loginParams.set('redirect_uri', req.app.get('authClient').client_url + '/login/spotifyAuthCallback');
-        res.redirect('https://accounts.spotify.com/authorize?' + loginParams.toString());
+        var params = new URLSearchParams();
+        params.set('response_type', 'code');
+        params.set('client_id', req.app.get('authClient').client_id);
+        params.set('redirect_uri', req.app.get('authClient').client_url + '/login/spotifyAuthCallback');
+        res.redirect('https://accounts.spotify.com/authorize?' + params.toString());
     });
 
     /**
@@ -33,13 +35,13 @@ module.exports = function(){
     router.get('/spotifyAuthCallback', function(req, res) {
         // if user has accepted the request then autherization code should have been returned
         if (req.query.code) {
-            var authTokenParams = new URLSearchParams();
-            authTokenParams.set('code', req.query.code);
-            authTokenParams.set('redirect_uri', req.app.get('authClient').client_url + '/login/spotifyAuthCallback');
-            authTokenParams.set('grant_type', 'authorization_code');
+            var params = new URLSearchParams();
+            params.set('code', req.query.code);
+            params.set('redirect_uri', req.app.get('authClient').client_url + '/login/spotifyAuthCallback');
+            params.set('grant_type', 'authorization_code');
             
             // headers for requesting tokens per Spotify docs
-            var authTokenHeaders = {
+            var headers = {
                 headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Authorization': 'Basic ' + Buffer.from(req.app.get('authClient').client_id + ':' + req.app.get('authClient').client_secret).toString('base64')
@@ -47,7 +49,7 @@ module.exports = function(){
             };
     
             // perform POST request to token API with params and headers
-            axios.post('https://accounts.spotify.com/api/token', authTokenParams.toString(), authTokenHeaders)
+            axios.post('https://accounts.spotify.com/api/token', params.toString(), headers)
                 .then(response => {
                     // store token data in session
                     req.session.token_data = response.data;
@@ -73,20 +75,21 @@ module.exports = function(){
     router.get('/fetchProfile', function(req, res) {
          // if app has user's auth token, then fetch their profile data
         if(req.session.token_data) {
-            var authTokenHeaders = {
+            var headers = {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': 'Bearer ' + req.session.token_data.access_token,
                 },
             };
-            axios.get('https://api.spotify.com/v1/me', authTokenHeaders)
-            .then(response => {
-                req.session.profile = response.data;
-                res.redirect('/login/fetchPlaylists');
-            })
-            .catch(error => {
-                console.log(error);
-            });
+            axios.get('https://api.spotify.com/v1/me', headers)
+                .then(response => {
+                    req.session.profile = response.data;
+                    console.log(req.session.profile);
+                    res.redirect('/login/fetchPlaylists');
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
         // otherwise re-initiate login & authorization
         else {
@@ -99,20 +102,39 @@ module.exports = function(){
      */
     router.get('/fetchPlaylists', function(req, res) {
         if(req.session.token_data) {
-            var authTokenHeaders = {
+            var params = new URLSearchParams();
+            params.set('limit', 50);
+
+            var headers = {
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + req.session.token_data.access_token,
                 },
             };
-            axios.get('https://api.spotify.com/v1/me/playlists', authTokenHeaders)
-            .then(response => {
-                req.session.playlists = response.data;
-                res.redirect('/profile');
-            })
-            .catch(error => {
-                console.log(error);
-            });
+
+            axios.get('https://api.spotify.com/v1/me/playlists?' + params.toString(), headers)
+                .then(response => {
+                    // store playlist IDs in session
+                    var playlists = [];
+                    //console.log(response.data.items);
+                    for (var key in response.data.items) {
+                        if (response.data.items.hasOwnProperty(key)) {
+                            playlists.push({
+                                id: response.data.items[key].id, 
+                                tracksAPI: response.data.items[key].tracks.href,
+                                image: response.data.items[key].images[0],
+                                link: response.data.items[key].external_urls.spotify,
+                                tracks: [],
+                            });
+                        }
+                    }
+                    req.session.playlists = playlists;
+
+                    res.redirect('/home');
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
         // otherwise initiate login & authorization
         else {
