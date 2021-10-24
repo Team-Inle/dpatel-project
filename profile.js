@@ -13,6 +13,9 @@ module.exports = function(){
             context.user = req.session.profile.display_name;
             context.user_url = req.session.profile.external_urls.spotify;
             context.user_image = req.session.profile.images[0].url;
+            context.playlists = req.session.playlists;
+            context.playlists_length = context.playlists.length;
+            console.log(context.playlists);
             res.render('profile', context);
         }
         // if user has not logged in, redirect to home page

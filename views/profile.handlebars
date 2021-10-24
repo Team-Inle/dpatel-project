@@ -1,7 +1,54 @@
-<main class="bg-info align-items-stretch">
-	<div class="d-flex align-items-stretch">
-		<div class="col">
-			{{> navLeft}}
+<div class="container-fluid bg-dark bg-opacity-75 text-light">
+	<div class="row bg-dark bg-opacity-75 py-5 justify-content-center">
+		<div class="col-3">
+			<div class="row align-items-center mx-3">
+				<img src="{{user_image}}" alt="" class="m-auto w-75 img-fluid rounded-circle">
+			</div>
+			<div class="row align-items-center px-3">
+				<a href="{{user_url}}" class="fs-4 sptGrn text-center">{{user}}</a>
+			</div>
+			
+		</div>
+		<div class="col-3 text-light">
+			<p class="text-start">Number of playlists: {{playlists_length}}</p>
+			<ul class="text-start ps-0">Overall Average Scores
+				<li>
+					[Ac] Acousticness: [placeholder]
+				</li>
+				<li>
+					[Da] Danceability: [placeholder]
+				</li>
+				<li>
+					[En] Energy: [placeholder]
+				</li>
+				<li>
+					[In] Instrumentalness: [placeholder]
+				</li>
+				<li>
+					[Li] Liveness: [placeholder]
+				</li>
+				<li>
+					[Lo] Loudness: [placeholder]
+				</li>
+				<li>
+					[Sp] Speechiness: [placeholder]
+				</li>
+				<li>
+					[Va] Valence: [placeholder]
+				</li>
+			</ul>
 		</div>
 	</div>
-</main>
+	<div class="row bg-dark bg-opacity-50 py-3 justify-content-center">
+			{{#each playlists}}
+			<div class="col-2 m-3 p-3 bg-dark justify-content-center">
+				<h5 class="text-center sptGrn">{{name}}</h5>
+				<img src="{{image}}" class="bg rounded-circle img-fluid p-3">
+				<h6 class="text-center p-0">Ac: ? | Da: ? | En: ? | In: ?</h6>
+				<h6 class="text-center p-0">Li: ? | Lo: ? | Sp: ? | Va: ?</h6>
+			</div>
+			{{else}}
+				<p class="empty">Uh oh! You don't appear to have any playlists. :(</p>
+			{{/each}}
+	</div>
+</div>

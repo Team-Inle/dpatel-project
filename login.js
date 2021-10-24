@@ -120,9 +120,10 @@ module.exports = function(){
                     for (var key in response.data.items) {
                         if (response.data.items.hasOwnProperty(key)) {
                             playlists.push({
+                                name: response.data.items[key].name, 
                                 id: response.data.items[key].id, 
                                 tracksAPI: response.data.items[key].tracks.href,
-                                image: response.data.items[key].images[0],
+                                image: response.data.items[key].images[0].url,
                                 link: response.data.items[key].external_urls.spotify,
                                 tracks: [],
                             });

@@ -6,6 +6,33 @@ body {
     opacity: 1
 }
 
-a.sptGrn, p.sptGrn, span.sptGrn {
+a.sptGrn, p.sptGrn, span.sptGrn, h5.sptGrn {
     color: #1DB954;
+}
+
+a.sptGrn:hover {
+    color: white;
+}
+
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: #AA0000;
+}
+
+.navbar-dark .navbar-brand:hover, .navbar-brand:focus {
+    color: white;
+}
+
+.navbar-dark .navbar-brand {
+    color: #1DB954;
+}
+
+img.bg {
+    -webkit-filter: blur(5px) grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: blur(1px) grayscale(100%);
+}
+
+.dropdown-menu {
+    max-height: 280px;
+    overflow-y: auto;
 }
