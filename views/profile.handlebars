@@ -1,6 +1,6 @@
 <div class="container-fluid bg-dark bg-opacity-75 text-light">
 	<div class="row bg-dark bg-opacity-75 py-5 justify-content-center">
-		<div class="col-3">
+		<div class="col-12 col-lg-3">
 			<div class="row align-items-center mx-3">
 				<img src="{{user_image}}" alt="" class="m-auto w-75 img-fluid rounded-circle">
 			</div>
@@ -9,7 +9,7 @@
 			</div>
 			
 		</div>
-		<div class="col-3 text-light">
+		<div class="col-12 col-lg-3 text-light">
 			<p class="text-start">Number of playlists: {{playlists_length}} (max 50)</p>
 			<ul class="text-start ps-0">Overall Average Scores
 				<li>
@@ -41,7 +41,7 @@
 	</div>
 	<div class="row bg-dark bg-opacity-50 py-3 justify-content-center">
 			{{#each playlists}}
-			<div class="col-12 col-md-2 m-3 p-3 bg-dark justify-content-center">
+			<div class="col-12 col-lg-3 m-3 p-3 bg-dark justify-content-center">
 				<h5 class="text-center sptGrn">{{name}}</h5>
 				<img src="{{image}}" class="bg rounded-circle img-fluid p-3">
 				<h6 class="text-center p-0">Ac: ? | Da: ? | En: ? | In: ?</h6>
