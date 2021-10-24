@@ -1,46 +1,43 @@
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-			<div class="container-fluid">
-				<a href="/home" class="navbar-brand">RANKify</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					    {{#if user}}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{user_url}}">
-                                Hi, {{user}}
-                                <img src="{{user_image}}" alt="" width="20" class="d-inline-block align-text-center rounded-circle">
-                            </a>
-                        </li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a href="/home" class="navbar-brand">RANKify</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                {{#if user}}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{user_url}}">
+                        Hi, {{user}}
+                        <img src="{{user_image}}" alt="" width="20" class="d-inline-block align-text-center rounded-circle">
+                    </a>
+                </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="/profile">Profile</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Playlists
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
-                                {{#each playlists}}
-                                <li><a class="dropdown-item" href="#">{{name}}</a></li>
-                                {{else}}
-                                <li>Uh oh! You don't appear to have any playlists. :(</li>
-                                {{/each}}
-                                
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
-                        </li>
-					    {{/if}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">Profile</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Playlists
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
+                        {{#each playlists}}
+                        <li><a class="dropdown-item" href="#">{{name}}</a></li>
+                        {{else}}
+                        <li>Uh oh! You don't appear to have any playlists. :(</li>
+                        {{/each}}
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                {{/if}}
+            </ul>
 
-                    <div class="">
-                            <a href="" class="sptGrn"><i class="fab fa-spotify"> API Docs</i></a>
-                    </div>
-				</div>
-			</div>
-		</nav>
+            <div class="">
+                    <a href="" class="sptGrn"><i class="fab fa-spotify"> API Docs</i></a>
+            </div>
+        </div>
+    </div>
+</nav>
