@@ -2,6 +2,9 @@
   "name": "rankify",
   "version": "1.0.0",
   "main": "server.js",
+  "engines": {
+    "node": "12.16.1"
+  },
   "dependencies": {
     "axios": "^0.23.0",
     "body-parser": "^1.19.0",

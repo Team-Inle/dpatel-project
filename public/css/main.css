@@ -1,7 +1,13 @@
+/* Below background CSS obtained via this tool: https://superdesigner.co/tools/css-backgrounds */
 body {
-    background: linear-gradient(25deg, #ff10c7 40%, transparent 41%, transparent 59%, #ff10c7 60%) ,linear-gradient(90deg, transparent 45%, #14d7ee 45%, #14d7ee 55%, transparent 55%, transparent 20%, #14d7ee 20%, #14d7ee 30%,transparent 30%);
-    background-size: 5em 5em;
-    background-color: #ff10c7;
+    background: linear-gradient(25deg, #1DB954 40%, transparent 41%, transparent 59%, #1DB954 60%)  ,linear-gradient(90deg, transparent 45%, #535353 45%, #535353 55%, transparent 55%, transparent 20%, #535353 20%, #535353 30%,transparent 30%) ,linear-gradient(90deg, #535353 9%, transparent 10%);
+    background-size: 2em 2em;
+    background-color: #1DB954;
+    opacity: 1
+}
+
+a.sptGrn, p.sptGrn, span.sptGrn {
+    color: #1DB954;
 }
 
 div {

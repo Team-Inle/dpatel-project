@@ -16,9 +16,9 @@ app.use(cors()); // ##TODO
 app.use('/public',express.static(__dirname + '/public')); // set public folder as the web root
 console.log(__dirname + '/public');
 
-app.set('port', 4077); // set app to run on port 4077
+app.set('port', process.env.PORT); // set app to run on port 4077
 app.set('authClient', {
-	  client_url: 'http://localhost:' + app.get('port'),
+	  client_url: process.env.CLIENT_URL,
 	  client_id: process.env.SPOTIFY_CLIENT_ID,
 	  client_secret: process.env.SPOTIFY_CLIENT_SECRET,
 	}
