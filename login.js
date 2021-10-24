@@ -8,11 +8,11 @@ module.exports = function(){
     // Render /profile on page visit
     router.get('/', function(req, res, next) {
         var context = {};
-        // if user has logged in, then get user data from Users and Workouts and render profile page
+        // if user has logged in, redirect them to the profile page
         if(req.session.profile) {
-            res.redirect('/home')
+            res.redirect('/profile')
         }
-        // if user has not logged in, redirect to home page
+        // if user has not logged in, begin Spotify OAuth sequence
         else {
             res.redirect('/login/spotifyAuthLogin');
         }
@@ -130,7 +130,7 @@ module.exports = function(){
                     }
                     req.session.playlists = playlists;
 
-                    res.redirect('/home');
+                    res.redirect('/profile');
                 })
                 .catch(error => {
                     console.log(error);

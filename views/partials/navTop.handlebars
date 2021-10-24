@@ -1,0 +1,21 @@
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<div class="container-fluid">
+				<a href="/home" class="navbar-brand fs-4"><span class="sptGrn">RANKify</span></a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					{{#if user}}
+						<div class="navbar-nav">
+							<a class="nav-link fs-4" aria-current="page" href="{{user_url}}">
+								Hi, {{user}}
+								<img src="{{user_image}}" alt="" width="30" class="d-inline-block align-text-center rounded-circle">
+							</a>
+						</div>
+					{{/if}}
+                    <div class="ms-auto me-2">
+                            <a href="" class="fs-3 sptGrn"><i class="fab fa-spotify px-1">API</i></a>
+                    </div>
+				</div>
+			</div>
+		</nav>

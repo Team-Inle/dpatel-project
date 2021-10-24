@@ -8,6 +8,7 @@ var session = require('express-session'); // save user data across a session, re
 var cors = require('cors'); // enable data from outside this domain
 var env = require('dotenv').config(); // enable environment variables from process.env file
 var axios = require('axios'); // enable POST requests using Axios library
+const e = require('express');
 
 var app = express(); // create express instance called app
 app.use(express.json()); // set app to recognize incoming objects as JSON
@@ -36,18 +37,26 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.use('/login', require('./login.js'));
+app.use('/profile', require('./profile.js'));
 
 app.get('/', function(req, res){
 	var context = {};
-	res.render('home', context);
+	if(req.session.profile) {
+		res.redirect('/profile');
+	}
+	else {
+		res.render('home', context);
+	}
 });
 
 app.get('/home', function(req, res){
 	var context = {};
 	if(req.session.profile) {
-		context.user = req.session.profile.display_name;
+		res.redirect('/profile');
 	}
-	res.render('home', context);
+	else {
+		res.render('home', context);
+	}
 });
 
 app.use(function(req,res){

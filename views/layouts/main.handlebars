@@ -14,23 +14,14 @@
 	<title>Rankify your Spotify!</title>
 </head>
 
-<body class="d-flex flex-column h-100 pt-5">
+<body class="d-flex flex-column h-100">
 	<!--Header Element-->
-	<header>
-		<nav class="navbar navbar-expand-md navbar-light fixed-top bg-dark">
-			<div class="container-fluid">
-				<a href="#" class="navbar-brand"><span class="sptGrn">RANKify</span></a>
-			</div>
-			<div class="text-center me-2">
-				<a href="#" class="fs-3 sptGrn"><i class="fab fa-spotify px-1">API</i></a>
-			</div>
-		</nav>
+	<header class="mb-5">
+		{{> navTop}}
 	</header>
 	
 	<!--Main Body Element-->
-	<main class="flex-shrink-0">
 		{{{body}}}
-	</main>
 
 	<!--Footer Element-->
 	<footer class="footer mt-auto bg-dark">
