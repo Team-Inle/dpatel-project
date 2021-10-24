@@ -12,10 +12,16 @@ module.exports = function(){
         if(req.session.profile) {
             context.user = req.session.profile.display_name;
             context.user_url = req.session.profile.external_urls.spotify;
-            context.user_image = req.session.profile.images[0].url;
-            context.playlists = req.session.playlists;
-            context.playlists_length = context.playlists.length;
-            console.log(context.playlists);
+            if(req.session.profile.images[0]) {
+                context.user_image = req.session.profile.images[0].url;
+            }
+            else {
+                context.user_image = '/public/img/nopic.png';
+            }
+            if(req.session.playlists) {
+                context.playlists = req.session.playlists;
+                context.playlists_length = context.playlists.length;
+            }
             res.render('profile', context);
         }
         // if user has not logged in, redirect to home page
