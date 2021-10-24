@@ -26,7 +26,6 @@ module.exports = function(){
         params.set('response_type', 'code');
         params.set('client_id', req.app.get('authClient').client_id);
         params.set('redirect_uri', req.app.get('authClient').client_url + '/login/spotifyAuthCallback');
-        console.log(req.app.get('authClient').client_url + '/login/spotifyAuthCallback');
         res.redirect('https://accounts.spotify.com/authorize?' + params.toString());
     });
 
