@@ -15,6 +15,7 @@ module.exports = function(){
             if(req.session.profile.images[0]) {
                 context.user_image = req.session.profile.images[0].url;
             }
+            // if user has playlists, then get saved playlists from session
             else {
                 context.user_image = '/public/img/nopic.png';
             }

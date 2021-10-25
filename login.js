@@ -84,7 +84,7 @@ module.exports = function(){
             axios.get('https://api.spotify.com/v1/me', headers)
                 .then(response => {
                     req.session.profile = response.data;
-                    console.log(req.session.profile);
+                    //console.log(req.session.profile);
                     res.redirect('/login/fetchPlaylists');
                 })
                 .catch(error => {
@@ -129,7 +129,6 @@ module.exports = function(){
                         }
                     }
                     req.session.playlists = playlists;
-
                     res.redirect('/profile');
                 })
                 .catch(error => {
@@ -144,3 +143,44 @@ module.exports = function(){
 
     return router;
 }();
+
+/*
+
+
+                    for(var i = 0; i < playlists.length; i++) {
+                        var offset = 0;
+                        params.set('offset', offset);
+                        // get first 50 tracks of each playlist
+                        axios.get('https://api.spotify.com/v1/playlists/' + playlists[i].id + '/tracks?' + params.toString(), headers)
+                            .then(response => {
+                                // right now I only support up to 50 tracks, if more than 50 then ignore the rest
+                                var trackCount = response.data.total;
+                                if(response.data.total > 50) {
+                                    trackCount = 50;
+                                }
+                                // for each track, get audio features and save to playlists
+                                for(let j = 0; j < trackCount; j++) {
+                                    thisId = response.data.items[j].track.id;
+                                    thisName = response.data.items[j].track.name;
+                                    thisArtist = response.data.items[j].track.artists[0].name;
+                                    //console.log(thisName + ' - ' + thisArtist);
+                                    axios.get('https://api.spotify.com/v1/audio-features/' + response.data.items[0].track.id, headers)
+                                    .then(response => {
+                                        playlists[i].track[j].push({
+                                            id: response.data.items[j].thisId,
+                                            name: response.data.items[j].thisName,
+                                            artist: response.data.items[j].thisArtist,
+                                            features: response.data,
+                                        })
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    }
+                    console.log(playlists);
+*/

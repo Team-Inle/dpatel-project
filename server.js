@@ -38,6 +38,7 @@ app.set('view engine', 'handlebars');
 
 app.use('/login', require('./login.js'));
 app.use('/profile', require('./profile.js'));
+app.use('/playlist', require('./playlist.js'));
 
 app.get('/', function(req, res){
 	var context = {};

@@ -23,7 +23,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
                         {{#each playlists}}
-                        <li><a class="dropdown-item" href="#">{{name}}</a></li>
+                        <li><a class="dropdown-item" href="/playlist?playlistId={{id}}&ind={{@index}}">{{name}}</a></li>
                         {{else}}
                         <li>Uh oh! You don't appear to have any playlists. :(</li>
                         {{/each}}
@@ -36,7 +36,7 @@
             </ul>
 
             <div class="">
-                    <a href="" class="sptGrn"><i class="fab fa-spotify"> API Docs</i></a>
+                    <a href="https://developer.spotify.com/documentation/web-api/reference/#/" class="sptGrn"><i class="fab fa-spotify"> API Docs</i></a>
             </div>
         </div>
     </div>

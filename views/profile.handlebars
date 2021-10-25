@@ -1,14 +1,10 @@
 <div class="container-fluid bg-dark bg-opacity-75 text-light">
-	<div class="row bg-dark bg-opacity-75 py-5 justify-content-center">
-		<div class="col-12 col-lg-3">
-			<div class="row align-items-center mx-3">
-				<img src="{{user_image}}" alt="" class="m-auto w-75 img-fluid rounded-circle">
-			</div>
-			<div class="row align-items-center px-3">
-				<a href="{{user_url}}" class="fs-4 sptGrn text-center">{{user}}</a>
-			</div>
-			
+	<div class="row py-5 justify-content-center">
+		<div class="col-12 col-lg-3 p-3 bg-dark justify-content-center">
+			<div class="text-center"><a href="{{user_url}}" class="fs-3 sptGrn">{{user}}</a></div>
+			<img src="{{user_image}}" class="rounded-circle img-fluid p-3">
 		</div>
+		<!-- I'm removing this functionality due to time constraints
 		<div class="col-12 col-lg-3 text-light">
 			<p class="text-start">Number of playlists: {{playlists_length}} (max 50)</p>
 			<ul class="text-start ps-0">Overall Average Scores
@@ -37,18 +33,18 @@
 					[Va] Valence: [placeholder]
 				</li>
 			</ul>
-		</div>
+		</div> -->
 	</div>
-	<div class="row bg-dark bg-opacity-50 py-3 justify-content-center">
+	<div class="row bg-dark bg-opacity-75 py-3 justify-content-center">
 			{{#each playlists}}
 			<div class="col-12 col-lg-3 m-3 p-3 bg-dark justify-content-center">
-				<h5 class="text-center sptGrn">{{name}}</h5>
-				<img src="{{image}}" class="bg rounded-circle img-fluid p-3">
-				<h6 class="text-center p-0">Ac: ? | Da: ? | En: ? | In: ?</h6>
-				<h6 class="text-center p-0">Li: ? | Lo: ? | Sp: ? | Va: ?</h6>
+				<div class="text-center"><a href="{{link}}" class="fs-3 sptGrn">{{name}}</a></div>
+				<img src="{{image}}" class="rounded-circle img-fluid p-3">
 			</div>
 			{{else}}
+            <div class="col-12 col-lg-3 m-3 p-3 bg-dark justify-content-center">
 				<p class="empty">Uh oh! You don't appear to have any playlists. :(</p>
+            </div>
 			{{/each}}
 	</div>
 </div>

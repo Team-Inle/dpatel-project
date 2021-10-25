@@ -1,0 +1,22 @@
+<div class="container-fluid bg-dark bg-opacity-75 text-light flex-fill">
+    <div class="row py-5 justify-content-center">
+		<div class="col-12 col-lg-3 p-3 bg-dark justify-content-center">
+			<div class="text-center"><a href="{{playlist_url}}" class="fs-3 sptGrn">{{playlist_name}}</a></div>
+			<img src="{{playlist_image}}" class="rounded-circle img-fluid p-3">
+			<div class="text-center"><span>Placeholder - Microservice<img src="#Radar_Chart" class="rounded-circle img-fluid p-3"></span></div>
+		</div>
+    </div>
+	<div class="row bg-dark bg-opacity-75 py-3 justify-content-center flex-fill">
+			{{#each tracks}}
+			<div class="col-12 col-lg-3 m-3 p-3 bg-dark justify-content-center">
+				<div class="text-center"><a href="{{link}}" class="fs-5 sptGrn">{{name}}<br>{{artist}}</a></div>
+				<img src="{{image}}" class="rounded-circle img-fluid p-3">
+			</div>
+			{{else}}
+            <div class="col-12 col-lg-3 m-3 p-3 bg-dark justify-content-center">
+				<p class="empty">Uh oh! This playlist appears to be empty. :(</p>
+            </div>
+			{{/each}}
+            
+	</div>
+</div>
