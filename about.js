@@ -23,6 +23,9 @@ module.exports = function(){
                 context.playlists = req.session.playlists;
                 context.playlists_length = context.playlists.length;
             }
+
+            
+            context.active_about = true;
             res.render('about', context);
         }
         // if user has not logged in, redirect to home page

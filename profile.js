@@ -23,12 +23,21 @@ module.exports = function(){
                 context.playlists = req.session.playlists;
                 context.playlists_length = context.playlists.length;
             }
+
+            context.active_profile = true;
             res.render('profile', context);
         }
         // if user has not logged in, redirect to home page
         else {
             res.redirect('/home');
         }
+    }); 
+
+     // Destroy session and return to home page
+     router.get('/logout', function(req, res, next) {
+        var context = {};
+        req.session.destroy();
+        res.redirect('/home');
     }); 
 
     return router;

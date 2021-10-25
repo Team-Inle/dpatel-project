@@ -13,15 +13,20 @@
                         <img src="{{user_image}}" alt="" width="20" class="d-inline-block align-text-center rounded-circle">
                     </a>
                 </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="/profile">Profile</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{#if active_profile}}active{{/if}}" href="#" id="navbarDropdownMenuLinkProfile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Profile
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLinkProfile">
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                        <li><a class="dropdown-item" href="/profile/logout">Logout</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{#if active_playlist}}active{{/if}}" href="#" id="navbarDropdownMenuLinkPlaylist" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Playlists
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLink">
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdownMenuLinkPlaylist">
                         {{#each playlists}}
                         <li><a class="dropdown-item" href="/playlist?playlistId={{id}}&ind={{@index}}">{{name}}</a></li>
                         {{else}}
@@ -30,7 +35,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/about">About</a>
+                    <a class="nav-link {{#if active_about}}active{{/if}}" href="/about">About</a>
                 </li>
                 {{/if}}
             </ul>

@@ -28,11 +28,8 @@ module.exports = function(){
                 context.playlist_url = context.playlists[req.query.ind].link;
             }
 
-            if(req.session.playlists[req.query.ind].tracks.length >= 1) {
-                context.tracks = req.session.playlists[req.query.ind].tracks;
-                res.render('playlist', context);
-            }
-            else {
+            // if track data has not yet been saved for this playlistm, fetch it
+            if(req.session.playlists[req.query.ind].tracks.length < 1) {
                 var headers = {
                     headers: {
                         'Content-Type': 'application/json',
@@ -94,6 +91,7 @@ module.exports = function(){
                                 context.tracks = tracks;
                                 req.session.playlists[req.query.ind].tracks = tracks;
                                 // pass user and playlist to page
+                                context.active_playlist = true;
                                 res.render('playlist', context);
                             }))
                             .catch(error => {
@@ -103,6 +101,12 @@ module.exports = function(){
                     .catch(error => {
                         console.log(error);
                     });
+            }
+            else {
+                context.tracks = req.session.playlists[req.query.ind].tracks;
+                // pass user and playlist to page
+                context.active_playlist = true;
+                res.render('playlist', context);
             }
         }
         // if user has not logged in, redirect to home page
