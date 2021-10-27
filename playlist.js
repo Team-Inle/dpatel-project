@@ -70,6 +70,15 @@ module.exports = function(){
 
                         axios.all(requests)
                             .then(axios.spread((...responses) => {
+                                daAverage = 0;
+                                enAverage = 0;
+                                loAverage = 0;
+                                spAverage = 0;
+                                acAverage = 0;
+                                inAverage = 0;
+                                liAverage = 0;
+                                vaAverage = 0;
+
                                 for (let j = 0; j < responses.length; j++) {
                                     tracks.push({
                                         id: ids[j],
@@ -77,20 +86,41 @@ module.exports = function(){
                                         artist: artists[j],
                                         link: links[j],
                                         image: images[j],
-                                        danceability: responses[j].data.danceability,
-                                        energy: responses[j].data.energy,
-                                        loudness: responses[j].data.loudness,
-                                        speechiness: responses[j].data.speechiness,
-                                        acousticness: responses[j].data.acousticness,
-                                        instrumentalness: responses[j].data.instrumentalness,
-                                        liveness: responses[j].data.liveness,
-                                        valence: responses[j].data.valence,
+                                        danceability: Math.round(responses[j].data.danceability*10000)/100,
+                                        energy: Math.round(responses[j].data.energy*10000)/100,
+                                        loudness: Math.round((responses[j].data.loudness/-60)*10000)/100,
+                                        speechiness: Math.round(responses[j].data.speechiness*10000)/100,
+                                        acousticness: Math.round(responses[j].data.acousticness*10000)/100,
+                                        instrumentalness: Math.round(responses[j].data.instrumentalness*10000)/100,
+                                        liveness: Math.round(responses[j].data.liveness*10000)/100,
+                                        valence: Math.round(responses[j].data.valence*10000)/100,
                                     });
+
+                                    daAverage += tracks[j].danceability;
+                                    enAverage += tracks[j].energy;
+                                    loAverage += tracks[j].loudness;
+                                    spAverage += tracks[j].speechiness;
+                                    acAverage += tracks[j].acousticness;
+                                    inAverage += tracks[j].instrumentalness;
+                                    liAverage += tracks[j].liveness;
+                                    vaAverage += tracks[j].valence;
                                 }
 
-                                context.tracks = tracks;
                                 req.session.playlists[req.query.ind].tracks = tracks;
+                                req.session.playlists[req.query.ind].averages = {
+                                    da: Math.round(daAverage)/responses.length,
+                                    en: Math.round(enAverage)/responses.length,
+                                    lo: Math.round(loAverage)/responses.length,
+                                    sp: Math.round(spAverage)/responses.length,
+                                    ac: Math.round(acAverage)/responses.length,
+                                    in: Math.round(inAverage)/responses.length,
+                                    li: Math.round(liAverage)/responses.length,
+                                    va: Math.round(vaAverage)/responses.length,
+                                }
+
                                 // pass user and playlist to page
+                                context.tracks = tracks;
+                                context.averages = req.session.playlists[req.query.ind].averages;
                                 context.active_playlist = true;
                                 res.render('playlist', context);
                             }))
@@ -103,8 +133,10 @@ module.exports = function(){
                     });
             }
             else {
-                context.tracks = req.session.playlists[req.query.ind].tracks;
+
                 // pass user and playlist to page
+                context.tracks = req.session.playlists[req.query.ind].tracks;
+                context.averages = req.session.playlists[req.query.ind].averages;
                 context.active_playlist = true;
                 res.render('playlist', context);
             }
