@@ -61,7 +61,7 @@ module.exports = function(){
             }
             // otherwise some error should be sent back
             else if (req.query.error) {
-            // ##TODO
+                res.redirect('/home');
             }
             // this should never happen, but if it does - do something
             else {
