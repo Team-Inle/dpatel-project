@@ -1,6 +1,6 @@
 <div class="container-fluid bg-dark bg-opacity-75 text-light">
-	<div class="row py-5 justify-content-center">
-		<div class="col-12 col-lg-3 p-3 bg-dark justify-content-center">
+	<div class="row pt-5 pb-3 justify-content-center">
+		<div class="col-12 col-lg-3 p-3 mb-3 bg-dark justify-content-center">
 			<div class="text-center"><a href="{{user_url}}" class="fs-3 sptGrn">{{user}}</a></div>
 			<img src="{{user_image}}" class="rounded-circle img-fluid p-3">
 		</div>
@@ -35,10 +35,11 @@
 			</ul>
 		</div> -->
 	</div>
-	<div class="row bg-dark bg-opacity-75 py-3 justify-content-center">
+	<hr class="bg-danger border-2 border-top border-light">
+	<div class="row py-3 justify-content-center">
 			{{#each playlists}}
 			<div class="col-12 col-lg-3 m-3 p-3 bg-dark justify-content-center">
-				<div class="text-center"><a href="{{link}}" class="fs-3 sptGrn">{{name}}</a></div>
+				<div class="text-center"><a href="/playlist?playlistId={{id}}&ind={{@index}}" class="fs-3 sptGrn">{{name}}</a></div>
 				<img src="{{image}}" class="rounded-circle img-fluid p-3">
 			</div>
 			{{else}}
