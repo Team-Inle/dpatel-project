@@ -108,14 +108,14 @@ module.exports = function(){
 
                                 req.session.playlists[req.query.ind].tracks = tracks;
                                 req.session.playlists[req.query.ind].averages = {
-                                    da: Math.round(daAverage)/responses.length,
-                                    en: Math.round(enAverage)/responses.length,
-                                    lo: Math.round(loAverage)/responses.length,
-                                    sp: Math.round(spAverage)/responses.length,
-                                    ac: Math.round(acAverage)/responses.length,
-                                    in: Math.round(inAverage)/responses.length,
-                                    li: Math.round(liAverage)/responses.length,
-                                    va: Math.round(vaAverage)/responses.length,
+                                    da: Math.round(daAverage/responses.length),
+                                    en: Math.round(enAverage/responses.length),
+                                    lo: Math.round(loAverage/responses.length),
+                                    sp: Math.round(spAverage/responses.length),
+                                    ac: Math.round(acAverage/responses.length),
+                                    in: Math.round(inAverage/responses.length),
+                                    li: Math.round(liAverage/responses.length),
+                                    va: Math.round(vaAverage/responses.length),
                                 }
 
                                 // pass user and playlist to page
