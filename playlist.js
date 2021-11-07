@@ -5,6 +5,7 @@ module.exports = function(){
     var express = require('express');
     var router = express.Router();
     var axios = require('axios');
+    var request = require
 
     // Render /profile on page visit
     router.get('/', function(req, res, next) {
@@ -118,15 +119,44 @@ module.exports = function(){
                                     va: Math.round(vaAverage/responses.length),
                                 }
 
-                                // pass user and playlist to page
-                                context.tracks = tracks;
-                                context.averages = req.session.playlists[req.query.ind].averages;
-                                context.active_playlist = true;
-                                res.render('playlist', context);
+                                var chartParams = new URLSearchParams();
+                                chartParams.set('cat1', req.session.playlists[req.query.ind].averages.ac);
+                                chartParams.set('cat2', req.session.playlists[req.query.ind].averages.da);
+                                chartParams.set('cat3', req.session.playlists[req.query.ind].averages.en);
+                                chartParams.set('cat4', req.session.playlists[req.query.ind].averages.in);
+                                chartParams.set('cat5', req.session.playlists[req.query.ind].averages.li);
+                                chartParams.set('cat6', req.session.playlists[req.query.ind].averages.lo);
+                                chartParams.set('cat7', req.session.playlists[req.query.ind].averages.sp);
+                                chartParams.set('cat8', req.session.playlists[req.query.ind].averages.va);
+                                var chartHeaders = {
+                                    'Accept': 'text/html; charset=utf-8'
+                                };
+                                console.log('https://radarchart-microservice-dennis.herokuapp.com/chart?', chartParams.toString());
+                                console.log('\n ---');
+                                axios.request({
+                                    method: 'GET',
+                                    url: 'https://radarchart-microservice-dennis.herokuapp.com/chart?' + chartParams.toString(),
+                                    responseType: 'text'
+                                  })
+                                  .then(response => {
+                                    // pass user and playlist to pageÍ
+                                    console.log(response.data.toString());
+                                    req.session.playlists[req.query.ind].chartUrl = response.data;
+                                    context.chart_url = req.session.playlists[req.query.ind].chartUrl;
+                                    context.tracks = tracks;
+                                    context.averages = req.session.playlists[req.query.ind].averages;
+                                    context.active_playlist = true;
+                                    res.render('playlist', context);
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                });
+                                //axios.get('https://radarchart-microservice-dennis.herokuapp.com/chart?', { responseType: 'text' }, chartParams.toString())
+                                    
                             }))
                             .catch(error => {
                                 console.log(error);
-                            })
+                            });
                     })
                     .catch(error => {
                         console.log(error);
@@ -135,6 +165,7 @@ module.exports = function(){
             else {
 
                 // pass user and playlist to page
+                context.chart_url = req.session.playlists[req.query.ind].chartUrl;
                 context.tracks = req.session.playlists[req.query.ind].tracks;
                 context.averages = req.session.playlists[req.query.ind].averages;
                 context.active_playlist = true;

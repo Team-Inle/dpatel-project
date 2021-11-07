@@ -1,13 +1,15 @@
 <div class="container-fluid bg-dark bg-opacity-75 text-light">
-    <div class="row pt-5 pb-3 justify-content-center">
+    <div class="row pt-5 pb-3 justify-content-around">
 		<div class="col-12 col-lg-3 p-3 mb-3 bg-dark justify-content-center">
 			<div class="text-center"><a href="{{playlist_url}}" target="_blank" class="fs-3 sptGrn">{{playlist_name}}</a></div>
 			<img src="{{playlist_image}}" class="rounded-circle img-fluid p-3">
-			<div class="text-center"><span>PLACEHOLDER - Microservice<img src="#Radar_Chart" class="rounded-circle img-fluid p-3"></span></div>
             {{#with averages}}
             <h6 class="text-center p-0">Ac: {{ac}} | Da: {{da}} | En: {{en}} | In: {{in}}</h6>
             <h6 class="text-center p-0">Li: {{li}} | Lo: {{lo}} | Sp: {{sp}} | Va: {{va}}</h6>
             {{/with}}
+		</div>
+		<div class="d-flex col-12 col-lg-5 p-3 mb-3 bg-dark justify-content-center align-items-center">
+			<img src="{{chart_url}}" class="img-fluid">
 		</div>
     </div>
 	<hr class="bg-danger border-2 border-top border-light">
