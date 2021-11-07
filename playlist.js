@@ -128,20 +128,16 @@ module.exports = function(){
                                 chartParams.set('cat6', req.session.playlists[req.query.ind].averages.lo);
                                 chartParams.set('cat7', req.session.playlists[req.query.ind].averages.sp);
                                 chartParams.set('cat8', req.session.playlists[req.query.ind].averages.va);
-                                var chartHeaders = {
-                                    'Accept': 'text/html; charset=utf-8'
-                                };
-                                console.log('https://radarchart-microservice-dennis.herokuapp.com/chart?', chartParams.toString());
-                                console.log('\n ---');
+
                                 axios.request({
                                     method: 'GET',
                                     url: 'https://radarchart-microservice-dennis.herokuapp.com/chart?' + chartParams.toString(),
                                     responseType: 'text'
                                   })
                                   .then(response => {
-                                    // pass user and playlist to pageÍ
-                                    console.log(response.data.toString());
+
                                     req.session.playlists[req.query.ind].chartUrl = response.data;
+                                    
                                     context.chart_url = req.session.playlists[req.query.ind].chartUrl;
                                     context.tracks = tracks;
                                     context.averages = req.session.playlists[req.query.ind].averages;
