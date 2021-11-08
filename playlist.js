@@ -135,9 +135,10 @@ module.exports = function(){
                                     responseType: 'text'
                                   })
                                   .then(response => {
-
+                                    console.log('Request: ', 'https://radarchart-microservice-dennis.herokuapp.com/chart?', chartParams.toString())
+                                    console.log('---\nResponse: ', response.data);
                                     req.session.playlists[req.query.ind].chartUrl = response.data;
-                                    
+
                                     context.chart_url = req.session.playlists[req.query.ind].chartUrl;
                                     context.tracks = tracks;
                                     context.averages = req.session.playlists[req.query.ind].averages;
