@@ -4,29 +4,30 @@ module.exports = function(){
     var axios = require('axios');
     var shared = require('./shared.js');
 
+    var setPlaylistInfo = function(context, req) {
+        context.playlist_name = context.playlists[req.query.ind].name;
+        context.playlist_image = context.playlists[req.query.ind].image;
+        context.playlist_url = context.playlists[req.query.ind].link;
+    }
+
     // Render /profile on page visit
     router.get('/', function(req, res, next) {
         var context = {};
         shared.userNavBarContext(context, req);
-
-        // if user has playlists, then get saved playlists from session
-        if(req.session.playlists) {
-            context.playlist_name = context.playlists[req.query.ind].name;
-            context.playlist_image = context.playlists[req.query.ind].image;
-            context.playlist_url = context.playlists[req.query.ind].link;
-        }
+        setPlaylistInfo(context, req);
 
         // if track data has not yet been saved for this playlist, fetch it
         if(req.session.playlists[req.query.ind].tracks.length < 1) {
+            
+            var params = new URLSearchParams();
+            params.set('offset', 0);
+
             var headers = {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + req.session.token_data.access_token,
                 },
             };
-            var offset = 0;
-            var params = new URLSearchParams();
-            params.set('offset', offset);
 
             var tracks = [];
             // get first 50 tracks of the current playlist ID
@@ -53,6 +54,11 @@ module.exports = function(){
 
                         let newGet = axios.get('https://api.spotify.com/v1/audio-features/' + response.data.items[j].track.id, headers);
                         requests.push(newGet);
+                    }
+                    
+                    var trackIds = "";
+                    for(let j = 0; j < trackCount; j++) {
+                        trackIds += ids[j] + ',';
                     }
 
                     axios.all(requests)
@@ -134,7 +140,6 @@ module.exports = function(){
                             .catch(error => {
                                 console.log(error);
                             });
-                            //axios.get('https://radarchart-microservice-dennis.herokuapp.com/chart?', { responseType: 'text' }, chartParams.toString())
                                 
                         }))
                         .catch(error => {
