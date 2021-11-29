@@ -2,7 +2,7 @@
  * 
  */
 
-// Frameworks
+// Import Framework Modules
 var express = require('express'); // Use: server framework
 var handlebars = require('express-handlebars').create({defaultLayout:'main'}); // Use: templating engine
 var session = require('express-session'); // Use: save user data across a session, realistically don't need cookies
@@ -11,9 +11,9 @@ var env = require('dotenv').config(); // Use: enable environment variables from 
 var axios = require('axios'); // Use: enable POST requests using Axios library
 
 
-// Setup Framework
+// Setup Framework Modules for Express Server
 var app = express();
-app.use(express.json()); // set app to recognize incoming objects as JSON
+app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(cors());
@@ -34,38 +34,60 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-// initialize and set app to use handlebars templating engine for views
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 /**
+ * Catch All - Redirect Home on No Login
+ * If user is not logged in and in process of getting logged in, redirect to home screen for login
+ */
+app.get('*', function(req, res, next){
+	if(req.path === '/') {
+		res.redirect('/home');
+	}
+	else if(req.path === '/home') {
+		if(req.session.profile) {
+			// user is already logged in so redirect to profile page
+			res.redirect('/profile');
+		}
+		else {
+			next();
+		}
+	}
+	else if(req.path.substring(0,6) === '/login') {
+		next();
+	}
+	else if(req.session.profile) {
+		next();
+	}
+	else {
+		res.redirect('/home');
+	};
+});
+
+/**
  * Page Specific Module Imports
  */
-app.use('/login', require('./login.js'));
-app.use('/profile', require('./profile.js'));
-app.use('/playlist', require('./playlist.js'));
-app.use('/about', require('./about.js'));
+ app.use('/login', require('./login.js'));
+ app.use('/profile', require('./profile.js'));
+ app.use('/playlist', require('./playlist.js'));
+ app.use('/about', require('./about.js'));
 
 /**
  * Home Page
- * Render login page or redirect to profile if already logged in (via session check)
  */
-app.get(['/', '/home'], function(req, res){
+ app.get('/home', function(req, res){
 	var context = {};
-	if(req.session.profile) {
-		res.redirect('/profile');
-	}
-	else {
-		res.render('home', context);
-	}
+	res.render('home', context);
 });
 
 /**
  * 404 Error Page
  */
 app.use(function(req,res){
+	var context = {};
 	res.status(404);
-	res.render('404');
+	res.render('404', context);
 });
 
 /**
@@ -73,8 +95,9 @@ app.use(function(req,res){
  */
 app.use(function(err, req, res, next){
 	console.error(err.stack);
+	var context = {};
 	res.status(500);
-	res.render('500');
+	res.render('500', context);
 });
 
 /**

@@ -8,15 +8,7 @@ module.exports = function(){
      * Check if user is already logged in, redirect if so
      */
     router.get('/', function(req, res, next) {
-        var context = {};
-        // if user has logged in, redirect them to the profile page
-        if(req.session.profile) {
-            res.redirect('/profile')
-        }
-        // if user has not logged in, begin Spotify OAuth sequence
-        else {
-            res.redirect('/login/spotifyAuthLogin');
-        }
+        res.redirect('/login/spotifyAuthLogin');
     }); 
 
     /**
