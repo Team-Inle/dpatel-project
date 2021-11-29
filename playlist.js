@@ -1,6 +1,3 @@
-const { ENETUNREACH } = require('constants');
-const { link } = require('fs');
-
 module.exports = function(){
     var express = require('express');
     var router = express.Router();
@@ -29,7 +26,7 @@ module.exports = function(){
                 context.playlist_url = context.playlists[req.query.ind].link;
             }
 
-            // if track data has not yet been saved for this playlistm, fetch it
+            // if track data has not yet been saved for this playlist, fetch it
             if(req.session.playlists[req.query.ind].tracks.length < 1) {
                 var headers = {
                     headers: {
@@ -45,7 +42,11 @@ module.exports = function(){
                 // get first 50 tracks of each playlist
                 axios.get('https://api.spotify.com/v1/playlists/' + req.query.playlistId + '/tracks?' + params.toString(), headers)
                     .then(response => {
-                        // right now I only support up to 50 tracks, if more than 50 then ignore the rest
+                        // right now I only support up to 50 tracks, if more than 50 then ignore the rest,
+                        // future functionality would include ability to request all tracks data, there's an additional API function on Spotify's API to request multiple songs at one
+                        // for now, get 50 songs then
+                        // get each songs track features data, saving it to the respective playlists object
+                        // then average all data across tracks in a playlist object
                         var trackCount = response.data.total;
                         if(response.data.total > 50) {
                             trackCount = 50;
