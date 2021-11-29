@@ -4,18 +4,18 @@ module.exports = function(){
     var axios = require('axios');
 
     /**
-     * Login - Profile Redirect
-     * Check if user is already logged in, redirect if so
+     * Login Interface - Middleware for launching Spotify OAuth sequence
      */
     router.get('/', function(req, res, next) {
         res.redirect('/login/spotifyAuthLogin');
     }); 
 
     /**
-     * Spotify OAuth Interface - initialize authorization request
+     * Spotify OAuth Interface - initialize authorization request by sending user to Spotify's auth page
+     * @params client ID, client URL - (stored in app object)
+     * @returns redirect to /spotifyAuthCallback
      */
     router.get('/spotifyAuthLogin', function(req, res) {
-        // set URL query parameters to initiate authorization request
         var params = new URLSearchParams();
         params.set('response_type', 'code');
         params.set('client_id', req.app.get('authClient').client_id);
@@ -24,7 +24,9 @@ module.exports = function(){
     });
 
     /**
-     * Spotify OAuth Interface - tokens
+     * Spotify OAuth Interface - obtain user's tokens from Spotify token API
+     * @params req.query.code || req.query.error
+     * @returns token as response & redirect to /fetchProfile
      */
     router.get('/spotifyAuthCallback', function(req, res) {
         // if user has accepted the request then autherization code should have been returned
@@ -34,7 +36,7 @@ module.exports = function(){
             params.set('redirect_uri', req.app.get('authClient').client_url + '/login/spotifyAuthCallback');
             params.set('grant_type', 'authorization_code');
             
-            // headers for requesting tokens per Spotify docs
+            // set headers for requesting tokens per Spotify docs
             var headers = {
                 headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -42,97 +44,87 @@ module.exports = function(){
                 },
             };
     
-            // perform POST request to token API with params and headers
+            // perform POST request to Spotify's token API and store in user's session
             axios.post('https://accounts.spotify.com/api/token', params.toString(), headers)
                 .then(response => {
-                    // store token data in session
                     req.session.token_data = response.data;
                     res.redirect('/login/fetchProfile');
                 })
                 .catch(error => {
                     console.log(error);
                 });
+        }
+        // if authentication sequence errors, log error if present and redirect user back to home to reinitiate login
+        else {
+            if (req.query.error) {
+                console.log(req.query.error);
             }
-            // otherwise some error should be sent back
-            else if (req.query.error) {
-                res.redirect('/home');
-            }
-            // this should never happen, but if it does - do something
-            else {
-            // ##TODO
-            }
+            res.redirect('/home');
+        }
     });
 
     /**
      * Spotify OAuth Interface - fetch user's profile data
+     * @params session.token_data
+     * @returns session.profile
      */
     router.get('/fetchProfile', function(req, res) {
-         // if app has user's auth token, then fetch their profile data
-        if(req.session.token_data) {
-            var headers = {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': 'Bearer ' + req.session.token_data.access_token,
-                },
-            };
-            axios.get('https://api.spotify.com/v1/me', headers)
-                .then(response => {
-                    req.session.profile = response.data;
-                    //console.log(req.session.profile);
-                    res.redirect('/login/fetchPlaylists');
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
-        // otherwise re-initiate login & authorization
-        else {
-            res.redirect('/login');
-        }
+        var headers = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': 'Bearer ' + req.session.token_data.access_token,
+            },
+        };
+
+        axios.get('https://api.spotify.com/v1/me', headers)
+            .then(response => {
+                req.session.profile = response.data;
+                //console.log(req.session.profile);
+                res.redirect('/login/fetchPlaylists');
+            })
+            .catch(error => {
+                console.log(error);
+            });
     });
 
     /**
      * Spotify OAuth Interface - fetch user's playlist data
+     * @params session.token_data
+     * @returns session.playlists
      */
     router.get('/fetchPlaylists', function(req, res) {
-        if(req.session.token_data) {
-            var params = new URLSearchParams();
-            params.set('limit', 50);
+        var params = new URLSearchParams();
+        params.set('limit', 50);
 
-            var headers = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + req.session.token_data.access_token,
-                },
-            };
+        var headers = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + req.session.token_data.access_token,
+            },
+        };
 
-            axios.get('https://api.spotify.com/v1/me/playlists?' + params.toString(), headers)
-                .then(response => {
-                    // store playlist IDs in session
-                    var playlists = [];
-                    for (var key in response.data.items) {
-                        if (response.data.items.hasOwnProperty(key)) {
-                            playlists.push({
-                                name: response.data.items[key].name, 
-                                id: response.data.items[key].id, 
-                                tracksAPI: response.data.items[key].tracks.href,
-                                image: response.data.items[key].images[0].url,
-                                link: response.data.items[key].external_urls.spotify,
-                                tracks: [],
-                            });
-                        }
+        axios.get('https://api.spotify.com/v1/me/playlists?' + params.toString(), headers)
+            .then(response => {
+                // store playlist IDs in session
+                var playlists = [];
+                for (var key in response.data.items) {
+                    if (response.data.items.hasOwnProperty(key)) {
+                        playlists.push({
+                            name: response.data.items[key].name, 
+                            id: response.data.items[key].id, 
+                            tracksAPI: response.data.items[key].tracks.href,
+                            image: response.data.items[key].images[0].url,
+                            link: response.data.items[key].external_urls.spotify,
+                            tracks: [],
+                        });
                     }
-                    req.session.playlists = playlists;
-                    res.redirect('/profile');
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        }
-        // otherwise initiate login & authorization
-        else {
-            res.redirect('/login');
-        }
+                }
+                req.session.playlists = playlists;
+                res.redirect('/profile');
+            })
+            .catch(error => {
+                console.log(error);
+            });
     });
 
     return router;
