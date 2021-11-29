@@ -69,22 +69,27 @@ module.exports = function(){
      * @returns session.profile
      */
     router.get('/fetchProfile', function(req, res) {
-        var headers = {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Bearer ' + req.session.token_data.access_token,
-            },
-        };
+        if(req.session.token_data) {
+            var headers = {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer ' + req.session.token_data.access_token,
+                },
+            };
 
-        axios.get('https://api.spotify.com/v1/me', headers)
-            .then(response => {
-                req.session.profile = response.data;
-                //console.log(req.session.profile);
-                res.redirect('/login/fetchPlaylists');
-            })
-            .catch(error => {
-                console.log(error);
-            });
+            axios.get('https://api.spotify.com/v1/me', headers)
+                .then(response => {
+                    req.session.profile = response.data;
+                    //console.log(req.session.profile);
+                    res.redirect('/login/fetchPlaylists');
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+        else {
+            res.redirect('/login/spotifyAuthLogin');
+        }
     });
 
     /**
@@ -93,38 +98,49 @@ module.exports = function(){
      * @returns session.playlists
      */
     router.get('/fetchPlaylists', function(req, res) {
-        var params = new URLSearchParams();
-        params.set('limit', 50);
+        if(req.session.token_data) {
+            var params = new URLSearchParams();
+            params.set('limit', 50);
 
-        var headers = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + req.session.token_data.access_token,
-            },
-        };
+            var headers = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + req.session.token_data.access_token,
+                },
+            };
 
-        axios.get('https://api.spotify.com/v1/me/playlists?' + params.toString(), headers)
-            .then(response => {
-                // store playlist IDs in session
-                var playlists = [];
-                for (var key in response.data.items) {
-                    if (response.data.items.hasOwnProperty(key)) {
-                        playlists.push({
-                            name: response.data.items[key].name, 
-                            id: response.data.items[key].id, 
-                            tracksAPI: response.data.items[key].tracks.href,
-                            image: response.data.items[key].images[0].url,
-                            link: response.data.items[key].external_urls.spotify,
-                            tracks: [],
-                        });
+            axios.get('https://api.spotify.com/v1/me/playlists?' + params.toString(), headers)
+                .then(response => {
+                    var playlists = [];
+                    for (var key in response.data.items) {
+                        if (response.data.items.hasOwnProperty(key)) {
+                            playlists.push({
+                                name: response.data.items[key].name, 
+                                id: response.data.items[key].id, 
+                                tracksAPI: response.data.items[key].tracks.href,
+                                image: function() {
+                                    if(response.data.items[key].images[0]) {
+                                        return response.data.items[key].images[0].url
+                                    }
+                                    else {
+                                        return '/public/img/noalbum.png';
+                                    }}(),
+                                link: response.data.items[key].external_urls.spotify,
+                                tracks: [],
+                            });
+                        }
                     }
-                }
-                req.session.playlists = playlists;
-                res.redirect('/profile');
-            })
-            .catch(error => {
-                console.log(error);
-            });
+                    req.session.playlists = playlists;
+                    res.redirect('/profile');
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+        else {
+            res.redirect('/login/spotifyAuthLogin');
+        }
+        
     });
 
     return router;

@@ -8,7 +8,7 @@ module.exports = function(){
     router.get('/', function(req, res, next) {
         var context = {};
         shared.userNavBarContext(context, req);
-        
+
         // if user has playlists, then get saved playlists from session
         if(req.session.playlists) {
             context.playlist_name = context.playlists[req.query.ind].name;
@@ -29,14 +29,9 @@ module.exports = function(){
             params.set('offset', offset);
 
             var tracks = [];
-            // get first 50 tracks of each playlist
+            // get first 50 tracks of the current playlist ID
             axios.get('https://api.spotify.com/v1/playlists/' + req.query.playlistId + '/tracks?' + params.toString(), headers)
                 .then(response => {
-                    // right now I only support up to 50 tracks, if more than 50 then ignore the rest,
-                    // future functionality would include ability to request all tracks data, there's an additional API function on Spotify's API to request multiple songs at one
-                    // for now, get 50 songs then
-                    // get each songs track features data, saving it to the respective playlists object
-                    // then average all data across tracks in a playlist object
                     var trackCount = response.data.total;
                     if(response.data.total > 50) {
                         trackCount = 50;
@@ -151,7 +146,6 @@ module.exports = function(){
                 });
         }
         else {
-
             // pass user and playlist to page
             context.chart_url = req.session.playlists[req.query.ind].chartUrl;
             context.tracks = req.session.playlists[req.query.ind].tracks;
