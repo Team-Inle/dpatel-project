@@ -104,5 +104,6 @@ app.use(function(err, req, res, next){
  * Launch Server on 
  */
 app.listen(app.get('port'), function(){
-	console.log('Express started on ' + app.get('authClient').CLIENT_URL + ':' + app.get('port') + '; press Ctrl-C to terminate.');
+	console.log('Express started on ' + app.get('authClient').CLIENT_URL + ':' 
+		+ app.get('port') + '; press Ctrl-C to terminate.');
 });

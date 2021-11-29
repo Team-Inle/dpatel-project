@@ -1,30 +1,26 @@
 module.exports = function(){
     var express = require('express');
     var router = express.Router();
-    var axios = require('axios');
+    var shared = require('./shared.js');
 
-    // Render /profile on page visit
+    /**
+     * Profile Page - Render user's profile and playlist info as Profile page
+     * @params req.session.profile, req.session.playlists
+     * @returns /profile (view)
+     */
     router.get('/', function(req, res, next) {
         var context = {};
-        context.user = req.session.profile.display_name;
-        context.user_url = req.session.profile.external_urls.spotify;
-        if(req.session.profile.images[0]) {
-            context.user_image = req.session.profile.images[0].url;
-        }
-        // if user has playlists, then get saved playlists from session
-        else {
-            context.user_image = '/public/img/nopic.png';
-        }
-        if(req.session.playlists) {
-            context.playlists = req.session.playlists;
-            context.playlists_length = context.playlists.length;
-        }
-
+        shared.userNavBarContext(context, req);
+        
         context.active_profile = true;
         res.render('profile', context);
     }); 
 
-     // Destroy session and return to home page
+     /**
+     * Logout Interface - Delete user's session and redirect back home
+     * @params req.session
+     * @returns /home (view)
+     */
      router.get('/logout', function(req, res, next) {
         var context = {};
         req.session.destroy();

@@ -2,22 +2,15 @@ module.exports = function(){
     var express = require('express');
     var router = express.Router();
     var axios = require('axios');
+    var shared = require('./shared.js');
 
     // Render /profile on page visit
     router.get('/', function(req, res, next) {
         var context = {};
-        context.user = req.session.profile.display_name;
-        context.user_url = req.session.profile.external_urls.spotify;
-        if(req.session.profile.images[0]) {
-            context.user_image = req.session.profile.images[0].url;
-        }
-        else {
-            context.user_image = '/public/img/nopic.png';
-        }
+        shared.userNavBarContext(context, req);
+        
         // if user has playlists, then get saved playlists from session
         if(req.session.playlists) {
-            context.playlists = req.session.playlists;
-            context.playlists_length = context.playlists.length;
             context.playlist_name = context.playlists[req.query.ind].name;
             context.playlist_image = context.playlists[req.query.ind].image;
             context.playlist_url = context.playlists[req.query.ind].link;
