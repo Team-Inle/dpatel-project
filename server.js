@@ -1,5 +1,7 @@
 /**
- * 
+ * RANKify by Dipan Patel
+ * RANKify connects to a users Spotify account and retrieves their playlist's audio features data
+ * from Spotify's API to provide a radar chart analysis of their overall playlist.
  */
 
 // Import Framework Modules
