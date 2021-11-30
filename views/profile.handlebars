@@ -1,46 +1,21 @@
 <div class="container-fluid bg-dark bg-opacity-75 text-light">
-	<div class="row pt-5 pb-3 justify-content-center">
-		<div class="col-12 col-lg-3 p-3 mb-3 bg-dark justify-content-center">
+	<div class="row pt-5 pb-3 justify-content-around">
+		<div class="col-12 col-lg-3 p-3 mb-3 bg-dark">
 			<div class="text-center"><a href="{{user_url}}" target="_blank" class="fs-3 sptGrn">{{user}}</a></div>
 			<img src="{{user_image}}" class="rounded-circle img-fluid p-3">
 		</div>
-		<!-- I'm removing this functionality due to time constraints
-		<div class="col-12 col-lg-3 text-light">
-			<p class="text-start">Number of playlists: {{playlists_length}} (max 50)</p>
-			<ul class="text-start ps-0">Overall Average Scores
-				<li>
-					[Ac] Acousticness: [placeholder]
-				</li>
-				<li>
-					[Da] Danceability: [placeholder]
-				</li>
-				<li>
-					[En] Energy: [placeholder]
-				</li>
-				<li>
-					[In] Instrumentalness: [placeholder]
-				</li>
-				<li>
-					[Li] Liveness: [placeholder]
-				</li>
-				<li>
-					[Lo] Loudness: [placeholder]
-				</li>
-				<li>
-					[Sp] Speechiness: [placeholder]
-				</li>
-				<li>
-					[Va] Valence: [placeholder]
-				</li>
-			</ul>
-		</div> -->
+		<div class="col-12 col-lg-3 p-3 mb-3 bg-dark justify-content-center">
+			<h5 class="text-center fs-3 sptGrn">Welcome to RANKify!</h5>
+			<p class="text-center py-3">Select a playlist from the navigation menu Playlists dropdown (you can also to be directed to the Spotify RANKifier data!</p>
+			<p class="text-center py-3">(you can also click the name / album art for your playlists below)</p>
+		</div>
 	</div>
 	<hr class="bg-danger border-2 border-top border-light">
 	<div class="row py-3 justify-content-center">
 			{{#each playlists}}
 			<div class="col-12 col-lg-3 m-3 p-3 bg-dark justify-content-center">
 				<div class="text-center"><a href="/playlist?playlistId={{id}}&ind={{@index}}" class="fs-3 sptGrn">{{name}}</a></div>
-				<img src="{{image}}" class="rounded-circle img-fluid p-3">
+				<a href="/playlist?playlistId={{id}}&ind={{@index}}" class="fs-3 sptGrn"><img src="{{image}}" class="rounded-circle img-fluid p-3"></a>
 			</div>
 			{{else}}
             <div class="col-12 col-lg-3 m-3 p-3 bg-dark justify-content-center">
