@@ -1,3 +1,8 @@
+/**
+ * userNavBarContext - sets context items for navBar rendering
+ * @param context 
+ * @param req 
+ */
 exports.userNavBarContext = function(context, req){
     context.user = req.session.profile.display_name;
     context.user_url = req.session.profile.external_urls.spotify;

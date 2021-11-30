@@ -3,7 +3,9 @@ module.exports = function(){
     var router = express.Router();
     var shared = require('./shared.js');
 
-    // Render /profile on page visit
+    /**
+     * About Page
+     */
     router.get('/', function(req, res, next) {
         var context = {};
         shared.userNavBarContext(context, req);
