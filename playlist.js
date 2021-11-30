@@ -105,8 +105,9 @@ module.exports = function(){
      * setTrackData - update tracks array with data received from getTrackData
      * @param tracks 
      * @param response 
+     * @param req - store retrieved track data
      */
-    const setTrackData = function(tracks, response) {
+    const setTrackData = function(tracks, response, req) {
         for(let j = 0; j < tracks.length; j++) {
             tracks[j].danceability = Math.round(response.data.audio_features[j].danceability*10000)/100;
             tracks[j].energy = Math.round(response.data.audio_features[j].energy*10000)/100;
@@ -192,17 +193,31 @@ module.exports = function(){
 
     /**
      * updateChartUrl - Take microservice chart URL and update for aesthetics
-     * @param url 
-     * @returns updatedUrl with modified bkg and dimensions
+     * @param url
+     * @param req - for updating session data
      */
-     const updateChartUrl = function(url) {
+     const updateChartUrl = function(url, req) {
         var updatedUrl = new URL(url);
         updatedUrl.searchParams.set('bkg', '#212529');
         updatedUrl.searchParams.set('h', '325');
         updatedUrl.searchParams.set('w', '325');
 
-        return updatedUrl.toString();
+        req.session.playlists[req.query.ind].chartUrl = updatedUrl.toString()
     };
+
+    /**
+     * renderPage - set context values and render
+     * @param req 
+     * @param res 
+     * @param context 
+     */
+    const renderPage = function(req, res, context) {
+        context.chart_url = req.session.playlists[req.query.ind].chartUrl;
+        context.tracks = req.session.playlists[req.query.ind].tracks;
+        context.averages = req.session.playlists[req.query.ind].averages;
+        context.active_playlist = true;
+        res.render('playlist', context);
+    }
 
     /**
      * Playlist Page - retrieve playlist's track data and respective radar chart
@@ -220,27 +235,17 @@ module.exports = function(){
             getTracks(req).then(response => {
                 setTracks(tracks, response);
                 getTrackData(req, tracks).then(response => {
-                    setTrackData(tracks, response);
+                    setTrackData(tracks, response, req);
                     getTracksAverage(tracks, req);
                     getRadarChart(req).then(response => {
-                        req.session.playlists[req.query.ind].chartUrl = updateChartUrl(response.data);
-                        
-                        context.chart_url = req.session.playlists[req.query.ind].chartUrl;
-                        context.tracks = tracks;
-                        context.averages = req.session.playlists[req.query.ind].averages;
-                        context.active_playlist = true;
-                        res.render('playlist', context);
+                        updateChartUrl(response.data, req);
+                        renderPage(req,res,context);
                     })
                 });
             });
         }
-        // retrieve data stored from session if already retrieved
         else {
-            context.chart_url = req.session.playlists[req.query.ind].chartUrl;
-            context.tracks = req.session.playlists[req.query.ind].tracks;
-            context.averages = req.session.playlists[req.query.ind].averages;
-            context.active_playlist = true;
-            res.render('playlist', context);
+            renderPage(req,res,context);
         }
     }); 
 
