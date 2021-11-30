@@ -117,6 +117,8 @@ module.exports = function(){
             tracks[j].liveness = Math.round(response.data.audio_features[j].liveness*10000)/100;
             tracks[j].valence = Math.round(response.data.audio_features[j].valence*10000)/100;
         }
+
+        req.session.playlists[req.query.ind].tracks = tracks;
     };
 
     /**
@@ -156,7 +158,6 @@ module.exports = function(){
             va: Math.round(vaAverage),
         }
 
-        req.session.playlists[req.query.ind].tracks = tracks;
         req.session.playlists[req.query.ind].averages = averages;
     }
 

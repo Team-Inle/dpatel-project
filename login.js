@@ -130,6 +130,7 @@ module.exports = function(){
                             });
                         }
                     }
+
                     req.session.playlists = playlists;
                     res.redirect('/profile');
                 })
