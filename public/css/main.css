@@ -8,6 +8,7 @@ body {
 
 a.sptGrn, p.sptGrn, span.sptGrn, h5.sptGrn {
     color: #1DB954;
+    text-decoration: none;
 }
 
 a.sptGrn:hover {
@@ -36,4 +37,8 @@ img.bg {
 .dropdown-menu {
     max-height: 280px;
     overflow-y: auto;
+}
+
+#modal{
+    z-index: 9999
 }
