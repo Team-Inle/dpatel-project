@@ -14,6 +14,7 @@ module.exports = function(){
         context.playlist_name = context.playlists[req.query.ind].name;
         context.playlist_image = context.playlists[req.query.ind].image;
         context.playlist_url = context.playlists[req.query.ind].link;
+        context.playlist_id = context.playlists[req.query.ind].id;
     }
 
     /**
