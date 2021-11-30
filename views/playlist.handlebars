@@ -1,13 +1,13 @@
 <div class="container-fluid bg-dark bg-opacity-75 text-light">
-    <div class="row pt-5 pb-3 justify-content-around">
-		<div class="col-12 col-lg-3 p-4 mb-3 bg-transparent text-center">
+    <div class="row pt-5 pb-3 justify-content-center flex-fill">
+		<div class="col-12 col-lg-3 p-3 m-3 bg-transparent text-center">
 			<iframe class="" src="https://open.spotify.com/embed/playlist/{{playlist_id}}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
 		</div>
-		<div class="col-12 col-lg-3 p-3 mb-3 bg-dark">
+		<div class="col-12 col-lg-3 p-3 m-3 bg-dark">
 			<div class="text-center"><a href="{{playlist_url}}" target="_blank" class="fs-3 sptGrn">{{playlist_name}}</a></div>
 			<img src="{{playlist_image}}" class="rounded-circle img-fluid p-3 my-auto">
 		</div>
-		<div class="col-12 col-lg-3 p-3 mb-3 bg-dark">
+		<div class="col-12 col-lg-3 p-3 m-3 bg-dark">
 			<div class="text-center fs-3"><a href="{{chart_url}}" target="_blank" class="fs-3 sptGrn">RANKify Chart</a></div>
 			<img src="{{chart_url}}" class="img-fluid p-3 my-auto">
             {{#with averages}}
